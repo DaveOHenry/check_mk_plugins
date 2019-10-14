@@ -60,7 +60,7 @@ except Exception, e:
 
 
 
-q = "SELECT datname FROM pg_database WHERE datname != 'rdsadmin' AND datistemplate = false;"
+q = "SELECT datname FROM pg_database WHERE datname != 'rdsadmin' AND datname != 'azure_maintenance' AND datistemplate = false;"
 db_cursor.execute(q)
 databases = db_cursor.fetchall()
 pg_versionnumber = db_connection.server_version
@@ -86,7 +86,7 @@ def postgres_sessions():
 
 def postgres_stat_database():
     print "<<<postgres_stat_database:sep(59)>>>"
-    q = "select datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, pg_database_size(datname) datsize from pg_stat_database where datname != 'rdsadmin';"
+    q = "select datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, pg_database_size(datname) datsize from pg_stat_database where datname != 'rdsadmin' AND datname != 'azure_maintenance';"
     db_cursor.execute(q)
     column_names = [desc[0] for desc in db_cursor.description]
     print ";".join(column_names)
@@ -97,7 +97,7 @@ def postgres_stat_database():
 def postgres_locks():
     print "<<<postgres_locks:sep(59)>>>"
     print_databases()
-    q = "SELECT datname, granted, mode FROM pg_locks l RIGHT JOIN pg_database d ON (d.oid=l.database) WHERE datname != 'rdsadmin' AND d.datallowconn;"
+    q = "SELECT datname, granted, mode FROM pg_locks l RIGHT JOIN pg_database d ON (d.oid=l.database) WHERE datname != 'rdsadmin' AND datname != 'azure_maintenance' AND d.datallowconn;"
     db_cursor.execute(q)
     column_names = [desc[0] for desc in db_cursor.description]
     print ";".join(column_names)
