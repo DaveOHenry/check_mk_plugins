@@ -11,5 +11,5 @@ register_rule("datasource_programs",
            Password( title = _("Password")),
         ]
     ),
-    factory_default = Rulespec.FACTORY_DEFAULT_UNUSED,
+#    factory_default = Rulespec.FACTORY_DEFAULT_UNUSED,
     match = "first")
